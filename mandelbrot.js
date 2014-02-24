@@ -52,21 +52,45 @@ var timeout = 0;
 var gi = 0;
 var start = 0;
 
-function resetvalues (preset) {
-  if (preset==0) {
-    startx = -2.4;
-    extx = 3.2;
-    starty = 1.2;
-    exty = 2.4;
-    re = 0.0;
-    im = 0.0;
-    julia = false; 
-    A_SLIDERS[0].f_setValue(6);
-    A_SLIDERS[1].f_setValue(12);
-    A_SLIDERS[2].f_setValue(18);
+function preset() { // escapevalue, maxiter, range, palette) {
+//    gred = parseInt(document.getElementById("sliderred").value);
+//    ggreen = parseInt(document.getElementById("slidergreen").value);
+//    gblue = parseInt(document.getElementById("sliderblue").value);
+//    escapevalue = escapevalue;
+//    document.getElementById("escape").value = escapevalue;
+//    maxiter = maxiter;
+//    document.getElementById("iteration").value = maxiter;
+//    range = range;
+//    if (range == 1) {
+//      document.getElementById("p100").checked = false;
+//    }
+//    else {
+//      document.getElementById("p100").checked = true;
+//    }
+//    palette = 0;
+//    if (palette == 0) {
+//      document.getElementById("proc").checked = true;
+//    }
+}
+
+function pre (startx, extx, starty, exty, re, im, julia, red, green, blue ) {
+    startx = startx;
+    extx = extx;
+    starty = starty;
+    exty = exty;
+    re = im;
+    im = im;
+    julia = julia;
+    A_SLIDERS[0].f_setValue(red);
+    A_SLIDERS[1].f_setValue(green);
+    A_SLIDERS[2].f_setValue(blue);
     gred = parseInt(document.getElementById("sliderred").value);
     ggreen = parseInt(document.getElementById("slidergreen").value);
     gblue = parseInt(document.getElementById("sliderblue").value);
+}
+ 
+function resetvalues (preset) {
+  if (preset==0) {
     escapevalue = 4.0;
     maxiter = 150;
     document.getElementById("iteration").value = maxiter;
@@ -75,6 +99,7 @@ function resetvalues (preset) {
     document.getElementById("p100").checked = false;
     palette = 0;
     document.getElementById("proc").checked = true;
+    pre(-2.4, 3.2, 1.2, 2.4, 0.0, 0.0, false);// 4.0, 150, 1, 0); 
   } 
   else if (preset==1) {
     startx = -0.990165396112942994;
