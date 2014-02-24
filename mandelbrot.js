@@ -53,11 +53,6 @@ var gi = 0;
 var start = 0;
 
 function preset() { // escapevalue, maxiter, range, palette) {
-//    gred = parseInt(document.getElementById("sliderred").value);
-//    ggreen = parseInt(document.getElementById("slidergreen").value);
-//    gblue = parseInt(document.getElementById("sliderblue").value);
-//    escapevalue = escapevalue;
-//    document.getElementById("escape").value = escapevalue;
 //    maxiter = maxiter;
 //    document.getElementById("iteration").value = maxiter;
 //    range = range;
@@ -73,7 +68,7 @@ function preset() { // escapevalue, maxiter, range, palette) {
 //    }
 }
 
-function pre (startx, extx, starty, exty, re, im, julia, red, green, blue ) {
+function pre (startx, extx, starty, exty, re, im, julia, red, green, blue, escapevalue ) {
     startx = startx;
     extx = extx;
     starty = starty;
@@ -87,19 +82,19 @@ function pre (startx, extx, starty, exty, re, im, julia, red, green, blue ) {
     gred = parseInt(document.getElementById("sliderred").value);
     ggreen = parseInt(document.getElementById("slidergreen").value);
     gblue = parseInt(document.getElementById("sliderblue").value);
+    escapevalue = escapevalue;
+    document.getElementById("escape").value = escapevalue;
 }
  
 function resetvalues (preset) {
   if (preset==0) {
-    escapevalue = 4.0;
     maxiter = 150;
     document.getElementById("iteration").value = maxiter;
-    document.getElementById("escape").value = escapevalue;
     range = 1;
     document.getElementById("p100").checked = false;
     palette = 0;
     document.getElementById("proc").checked = true;
-    pre(-2.4, 3.2, 1.2, 2.4, 0.0, 0.0, false);// 4.0, 150, 1, 0); 
+    pre(-2.4, 3.2, 1.2, 2.4, 0.0, 0.0, false, 6, 12, 18, 4.0);// 150, 1, 0); 
   } 
   else if (preset==1) {
     startx = -0.990165396112942994;
