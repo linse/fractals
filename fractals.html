@@ -1,0 +1,139 @@
+<head>
+<link href="./styles.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" language="JavaScript" src="slider.js"></script>  
+<script type="text/javascript" language="JavaScript" src="mandelbrot.js"></script>  
+<!--to run in chrome: chrome double minus allow-file-access-from-files-->
+</head>
+<body onload="load(800,600)" style="margin:0px">
+
+<div id="params" style="font-size: 14px; border: solid 2px; border-color: #000000; background-color:rgba(255,255,255,0.5); padding: 8px; width: 188px; height: 516px; position: absolute; top: 10px; right: 10px"> 						
+<p style="margin:2px">
+Max.Iteration:
+<input name="iteration" id="iteration" type="text" size="5" maxlength="5" value="150" style="float: right;">
+</p>
+<p style="margin:2px; clear:both;">
+Escape value:
+<input name="escape" id="escape" type="text" value="4" size="5" maxlength="7" style="float: right;">
+</p>
+<p style="margin:2px; margin-bottom:8px; clear:both;">
+Multithreading:
+<input id="mthread" name="mthread" type="checkbox" value="0" style="float: right;">
+</p>
+
+<fieldset style="padding:4px"><legend>Coloring</legend> 
+<input id="proc" name="radiobutton" type="radio" value="0" checked="checked">
+Procedural 
+<p></p>
+Red: &nbsp;&nbsp;		
+<input name="sliderred" id="sliderred" type="Text" size="2" maxlength="3" onChange="A_SLIDERS[0].f_setValue(this.value)">
+<script  type="text/javascript" language="JavaScript"> 
+var A_TPL2h = {
+	'b_vertical' : false,
+	'b_watch': true,
+	'n_controlWidth': 152,
+	'n_controlHeight': 16,
+	'n_sliderWidth': 19,
+	'n_sliderHeight': 16,
+	'n_pathLeft' : 0,
+	'n_pathTop' : 0,
+	'n_pathLength' : 132,
+	's_imgControl': 'img/sldr1v_bg.gif',
+	's_imgSlider': 'img/sldr1v_sl.gif',
+	'n_zIndex': 1
+}
+var A_INIT2h = {
+	's_name': 'sliderred',
+	'n_minValue' : 0,
+	'n_maxValue' : 255,
+	'n_value' : 8,
+	'n_step' : 1
+}
+new slider(A_INIT2h, A_TPL2h);
+</script>	
+
+Green: <input name="slidergreen" id="slidergreen" type="Text" size="2" maxlength="3" onChange="A_SLIDERS[1].f_setValue(this.value)">
+<script  type="text/javascript" language="JavaScript"> 
+var A_TPL2h = {
+	'b_vertical' : false,
+	'b_watch': true,
+	'n_controlWidth': 152,
+	'n_controlHeight': 16,
+	'n_sliderWidth': 19,
+	'n_sliderHeight': 16,
+	'n_pathLeft' : 0,
+	'n_pathTop' : 0,
+	'n_pathLength' : 132,
+	's_imgControl': 'img/sldr1v_bg.gif',
+	's_imgSlider': 'img/sldr1v_sl.gif',
+	'n_zIndex': 1
+}
+var A_INIT2h = {
+	's_name': 'slidergreen',
+	'n_minValue' : 0,
+	'n_maxValue' : 255,
+	'n_value' : 16,
+	'n_step' : 1
+}
+new slider(A_INIT2h, A_TPL2h);
+</script>
+Blue: &nbsp;&nbsp;
+<input name="sliderblue" id="sliderblue" type="Text" size="2" maxlength="3" onChange="A_SLIDERS[2].f_setValue(this.value)">
+<script  type="text/javascript" language="JavaScript"> 
+var A_TPL2h = {
+	'b_vertical' : false,
+	'b_watch': true,
+	'n_controlWidth': 152,
+	'n_controlHeight': 16,
+	'n_sliderWidth': 19,
+	'n_sliderHeight': 16,
+	'n_pathLeft' : 0,
+	'n_pathTop' : 0,
+	'n_pathLength' : 132,
+	's_imgControl': 'img/sldr1v_bg.gif',
+	's_imgSlider': 'img/sldr1v_sl.gif',
+	'n_zIndex': 1
+}
+var A_INIT2h = {
+	's_name': 'sliderblue',
+	'n_minValue' : 0,
+	'n_maxValue' : 255,
+	'n_value' : 24,
+	'n_step' : 1
+}
+new slider(A_INIT2h, A_TPL2h);
+</script>
+/100 
+<input  name="p100" id="p100" type="checkbox">	
+<p></p>
+<input id="vga" name="radiobutton" type="radio" value="1"> VGA 
+<input id="bw" name="radiobutton" type="radio" value="2"> B&amp;W
+<input id="nice" name="radiobutton" type="radio" value="3"> Sepia 
+</fieldset>
+<p style="margin:5px">
+<input type="button" name="ok" value="Redraw!" onClick="paramschange();">  
+</p>
+<ul class="presets">
+<li>Presets
+<ul>
+<li><a href="javascript:resetvalues(0); maincalc();">Start</a></li>
+<li><a href="javascript:resetvalues(2); maincalc();">Mandel1</a></li>
+<li><a href="javascript:resetvalues(1); maincalc();">Mandel2</a></li>
+<li><a href="javascript:resetvalues(3); maincalc();">Mandel3</a></li>
+<li><a href="javascript:resetvalues(4); maincalc();">Mandel4</a></li>
+<li><a href="javascript:resetvalues(5); maincalc();">Julia1</a></li>
+<li><a href="javascript:resetvalues(6); maincalc();">Julia2</a></li>
+</ul>
+</li>
+<li><a href="javascript:pngconvert('canvas');">PNG Output</a></li>
+</ul>
+</div>
+
+<canvas id="canvas" width="640" height="480" oncontextmenu="return false" onselectstart="return false">
+<br>
+You need a HTML5 compliant browser to use this page.
+(Use Firefox, Chrome, IE9+ etc.)
+<br>
+<br>
+</canvas>
+</body>
+</html>
