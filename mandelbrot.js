@@ -56,6 +56,24 @@ var timeout = 0;
 var gi = 0;
 var start = 0;
 
+function statsreport ( msg) {
+//	tdiv=document.getElementById("rendtime");
+//	tdiv.innerHTML="Rend.Time: "+msg;
+//	xdiv=document.getElementById("divx");
+//	xdiv.innerHTML="x1: " + startx.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  x2: " + (startx+extx).toFixed(16);
+//	ydiv=document.getElementById("divy");
+//	ydiv.innerHTML="y1: " + starty.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  y2: " + (starty-exty).toFixed(16);
+}
+
+function statsreportpos (xre,yim) {
+//	xdiv=document.getElementById("divx");
+//	xdiv.innerHTML="x1: " + startx.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  x2: " + (startx+extx).toFixed(16) +
+//	 "&nbsp;&nbsp;&nbsp;&nbsp;  x: " + xre.toFixed(16);
+//	ydiv=document.getElementById("divy");
+//	ydiv.innerHTML="y1: " + starty.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  y2: " + (starty-exty).toFixed(16) +
+//	"&nbsp;&nbsp;&nbsp;&nbsp;  y: " + yim.toFixed(16);
+}
+
 function resetvalues (preset) {
   if (preset==0) {
     startx = -2.4;
