@@ -74,6 +74,10 @@ function statsreportpos (xre,yim) {
 //	"&nbsp;&nbsp;&nbsp;&nbsp;  y: " + yim.toFixed(16);
 }
 
+function presetMandel () {
+    julia = false; 
+}
+
 function resetvalues (preset) {
   if (preset==0) {
     startx = -2.4;
@@ -82,7 +86,7 @@ function resetvalues (preset) {
     exty = 2.4;
     re = 0.0;
     im = 0.0;
-    julia = false; 
+    presetMandel();
     A_SLIDERS[0].f_setValue(6);
     A_SLIDERS[1].f_setValue(12);
     A_SLIDERS[2].f_setValue(18);
@@ -105,7 +109,7 @@ function resetvalues (preset) {
     exty = starty-0.309641392638807744;
     re = 0.0;
     im = 0.0;
-    julia = false; 
+    presetMandel();
     A_SLIDERS[0].f_setValue(73);
     A_SLIDERS[1].f_setValue(86);
     A_SLIDERS[2].f_setValue(100);
@@ -129,7 +133,7 @@ function resetvalues (preset) {
     exty = starty - 0.087840020000000000;
     re = 0.0;
     im = 0.0;
-    julia = false; 
+    presetMandel();
     A_SLIDERS[0].f_setValue(5);
     A_SLIDERS[1].f_setValue(5);
     A_SLIDERS[2].f_setValue(5);
@@ -152,7 +156,7 @@ function resetvalues (preset) {
     exty = starty - 0.087710353866447093;
     re = 0.0;
     im = 0.0;
-    julia = false; 
+    presetMandel();
     A_SLIDERS[0].f_setValue(25);
     A_SLIDERS[1].f_setValue(25);
     A_SLIDERS[2].f_setValue(25);
@@ -175,7 +179,7 @@ function resetvalues (preset) {
     exty = starty - 0.382400231034546839;
     re = 0.0;
     im = 0.0;
-    julia = false; 
+    presetMandel();
     A_SLIDERS[0].f_setValue(0);
     A_SLIDERS[1].f_setValue(4);
     A_SLIDERS[2].f_setValue(0);
