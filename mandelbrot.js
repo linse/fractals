@@ -74,150 +74,93 @@ function statsreportpos (xre,yim) {
 //	"&nbsp;&nbsp;&nbsp;&nbsp;  y: " + yim.toFixed(16);
 }
 
-function presetMandel () {
+function setMandel () {
     re = 0.0;
     im = 0.0;
     julia = false; 
 }
 
-function presetJulia (real, imaginary) {
+function setJulia (real, imaginary) {
     re = real;
     im = imaginary;
     julia = true; 
 }
 
-function resetvalues (preset) {
-  if (preset==0) {
-    startx = -2.4;
-    extx = 3.2;
-    starty = 1.2;
-    exty = 2.4;
-    presetMandel();
-    A_SLIDERS[0].f_setValue(6);
-    A_SLIDERS[1].f_setValue(12);
-    A_SLIDERS[2].f_setValue(18);
+function setColor (r, g, b, p100) {
+    A_SLIDERS[0].f_setValue(r);
+    A_SLIDERS[1].f_setValue(g);
+    A_SLIDERS[2].f_setValue(b);
     gred = parseInt(document.getElementById("sliderred").value);
     ggreen = parseInt(document.getElementById("slidergreen").value);
     gblue = parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 150;
+    palette=0;
+    document.getElementById("proc").checked = true;
+    document.getElementById("p100").checked = p100;
+}
+
+function setRegion (sx, ex, sy, ey) {
+    startx = sx;
+    extx = ex;
+    starty = sy;
+    exty = ey;
+}
+
+function setIterations (iters, esc) {
+    escapevalue = esc;
+    maxiter = iters;
     document.getElementById("iteration").value = maxiter;
     document.getElementById("escape").value = escapevalue;
+}
+
+function resetvalues (preset) {
+  if (preset==0) {
+    setRegion(-2.4,3.2,1.2,2.4);
+    setMandel();
+    setColor(6,12,18,false);
+    setIterations(150, 4.0);
     range = 1;
-    document.getElementById("p100").checked = false;
-    palette = 0;
-    document.getElementById("proc").checked = true;
   } 
   else if (preset==1) {
-    startx = -0.990165396112942994;
-    extx = -0.990116320000000000 - startx;
-    starty = 0.309678196004106188;
-    exty = starty-0.309641392638807744;
-    presetMandel();
-    A_SLIDERS[0].f_setValue(73);
-    A_SLIDERS[1].f_setValue(86);
-    A_SLIDERS[2].f_setValue(100);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=0.01;
-    document.getElementById("p100").checked =true;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setRegion(-0.990165396112943, 0.00004907611294291403, 0.3096781960041062, 0.00003680336529843231);
+    setMandel();
+    setColor(73,86,100,true);
+    setIterations(1000, 4.0);
+    range = 0.01;
   } 
-
   else if (preset==2) {
-    startx = -0.747345398829878366;
-    extx = -0.747309046788541043 - startx;
-    starty = 0.087867294132616292;
-    exty = starty - 0.087840020000000000;
-    presetMandel();
-    A_SLIDERS[0].f_setValue(5);
-    A_SLIDERS[1].f_setValue(5);
-    A_SLIDERS[2].f_setValue(5);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 500;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=1;
-    document.getElementById("p100").checked =false;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setRegion(-0.7473453988298784, 0.00003635204133733971, 0.08786729413261629, 0.00002727413261628675);
+    setMandel();
+    setColor(5,5,5,false);
+    setIterations(500, 4.0);
+    range = 1;
   } 
   else if (preset==3) {
-    startx = -0.750585682229024399;
-    extx = -0.743274216894426721 - startx;
-    starty = 0.093191882803597334;
-    exty = starty - 0.087710353866447093;
-    presetMandel();
-    A_SLIDERS[0].f_setValue(25);
-    A_SLIDERS[1].f_setValue(25);
-    A_SLIDERS[2].f_setValue(25);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
+    setRegion(-0.7505856822290244, 0.0073114653345977, 0.09319188280359733, 0.005481528937150232);
+    setMandel();
+    setColor(25,25,25,true);
+    setIterations(1000, 4.0);
     range=0.01;
-    document.getElementById("p100").checked =true;
-    palette=0;
-    document.getElementById("proc").checked =true;
   } 
   else if (preset==4) {
-    startx = -1.258443962896917640;
-    extx = -1.258443840496861240 - startx;
-    starty = 0.382400322834674643;
-    exty = starty - 0.382400231034546839;
-    presetMandel();
-    A_SLIDERS[0].f_setValue(0);
-    A_SLIDERS[1].f_setValue(4);
-    A_SLIDERS[2].f_setValue(0);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 3000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=1;
-    document.getElementById("p100").checked =false;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setRegion(-1.2584439628969177, 1.2240005653474384e-7, 0.3824003228346746, 9.180012777720847e-8);
+    setMandel();
+    setColor(0,4,0,false);
+    setIterations(3000, 4.0);
+    range = 1;
   } 
   else if (preset==5) {
-    startx = -0.902853313737311980;
-    extx = -0.077040114512740367 - startx;
-    starty = 0.321914656325943444;
-    exty = starty + 0.297445243092485266;
-    presetJulia(-0.751111111111111111,0.048888888888888889);
-    escapevalue = 4.0;
-    maxiter = 2000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    palette=3;
-    document.getElementById("nice").checked =true;
+    setRegion(-0.902853313737312, 0.8258131992245716, 0.32191465632594346, 0.6193598994184287);
+    setJulia(-0.751111111111111111,0.048888888888888889);
+    setIterations(2000,4.0);
+    palette = 3;
+    document.getElementById("nice").checked = true;
   } 
   else if (preset==6) {
-    startx = -1.553033696714109880;
-    extx = 1.528650709352576100 - startx;
-    starty = 1.094045464862574510;
-    exty = starty + 1.102749622025527560;
-    presetJulia(-0.777306122448979592,0.118040816326530612);
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    palette=2;
-    document.getElementById("bw").checked =true;
+    setRegion(-1.5530336967141098, 3.081684406066686, 1.0940454648625746, 2.196795086888102);
+    setJulia(-0.777306122448979592,0.118040816326530612);
+    setIterations(1000,4.0);
+    palette = 2;
+    document.getElementById("bw").checked = true;
   } 
 }
 
@@ -294,7 +237,6 @@ function msghandler(worker, data) {
         pixels[offset++] = 255;
       }
     }
-
   }
   ct2d.putImageData(image, 0, data.gi);
   if (gi < surfaceheight) {
