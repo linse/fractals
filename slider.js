@@ -212,7 +212,7 @@ function f_sliderMouseMove (e_event) {
 
 function f_sliderSaveTouch (e_event) {
 	if (!e_event || !e_event.touches) return;
-	e_event.preventDefault();
+	e_event.save_entDefault();
 	var e_touch = e_event.touches[0] || e_event.changedTouches[0];
 	window.n_mouseX = e_touch.pageX;
 	window.n_mouseY = e_touch.pageY;
