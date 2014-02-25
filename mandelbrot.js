@@ -80,6 +80,12 @@ function presetMandel () {
     julia = false; 
 }
 
+function presetJulia (real, imaginary) {
+    re = real;
+    im = imaginary;
+    julia = true; 
+}
+
 function resetvalues (preset) {
   if (preset==0) {
     startx = -2.4;
@@ -192,9 +198,7 @@ function resetvalues (preset) {
     extx = -0.077040114512740367 - startx;
     starty = 0.321914656325943444;
     exty = starty + 0.297445243092485266;
-    re = -0.751111111111111111;
-    im = 0.048888888888888889;
-    julia = true; 
+    presetJulia(-0.751111111111111111,0.048888888888888889);
     escapevalue = 4.0;
     maxiter = 2000;
     document.getElementById("iteration").value=maxiter;
@@ -207,9 +211,7 @@ function resetvalues (preset) {
     extx = 1.528650709352576100 - startx;
     starty = 1.094045464862574510;
     exty = starty + 1.102749622025527560;
-    re = -0.777306122448979592;
-    im = 0.118040816326530612;
-    julia = true; 
+    presetJulia(-0.777306122448979592,0.118040816326530612);
     escapevalue = 4.0;
     maxiter = 1000;
     document.getElementById("iteration").value=maxiter;
