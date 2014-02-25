@@ -56,7 +56,7 @@ var timeout = 0;
 var gi = 0;
 var start = 0;
 
-function statsreport ( msg) {
+function statsreport (msg) {
 //	tdiv=document.getElementById("rendtime");
 //	tdiv.innerHTML="Rend.Time: "+msg;
 //	xdiv=document.getElementById("divx");
@@ -121,8 +121,7 @@ function resetvalues (preset) {
     setIterations(150, 4.0);
   } 
   else if (preset==1) {
-    setRegion(-0.990165396112943, 0.3096781960041062, 
-               0.00004907611294291403, 0.00003680336529843231);
+    setRegion(-0.9901653, 0.30967819, 0.000049076112, 0.00003680);
     setMandel();
     setColor(73,86,100,0.01,true);
     setIterations(1000, 4.0);
