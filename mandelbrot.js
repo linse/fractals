@@ -26,12 +26,12 @@ var exty = 2.4;
 
 var re = 0.0;
 var im = 0.0;
-var prevstartx = startx; 
-var prevstarty = starty; 
-var prevextx = extx; 
-var prevexty = exty; 
-var prevre = re; 
-var previm = im; 
+var save_startx = startx; 
+var save_starty = starty; 
+var save_extx = extx; 
+var save_exty = exty; 
+var save_re = re; 
+var save_im = im; 
 var julia = false;   
 
 var lp1;
@@ -86,16 +86,17 @@ function setJulia (real, imaginary) {
     julia = true; 
 }
 
-function setColor (r, g, b, p100) {
+function setColor (r, g, b, rng, p100) {
     A_SLIDERS[0].f_setValue(r);
     A_SLIDERS[1].f_setValue(g);
     A_SLIDERS[2].f_setValue(b);
     gred = parseInt(document.getElementById("sliderred").value);
     ggreen = parseInt(document.getElementById("slidergreen").value);
     gblue = parseInt(document.getElementById("sliderblue").value);
-    palette=0;
+    palette = 0;
     document.getElementById("proc").checked = true;
     document.getElementById("p100").checked = p100;
+    range = rng;
 }
 
 function setRegion (sx, sy, ex, ey) {
@@ -114,56 +115,51 @@ function setIterations (iters, esc) {
 
 function resetvalues (preset) {
   if (preset==0) {
-    setRegion(-2.4,1.2,3.2,2.4);
     setMandel();
-    setColor(6,12,18,false);
+    setRegion(-2.4,1.2,3.2,2.4);
+    setColor(6,12,18,1,false);
     setIterations(150, 4.0);
-    range = 1;
   } 
   else if (preset==1) {
     setRegion(-0.990165396112943, 0.3096781960041062, 
                0.00004907611294291403, 0.00003680336529843231);
     setMandel();
-    setColor(73,86,100,true);
+    setColor(73,86,100,0.01,true);
     setIterations(1000, 4.0);
-    range = 0.01;
   } 
   else if (preset==2) {
+    setMandel();
     setRegion(-0.7473453988298784, 0.08786729413261629, 
                0.00003635204133733971, 0.00002727413261628675);
-    setMandel();
-    setColor(5,5,5,false);
+    setColor(5,5,5,1,false);
     setIterations(500, 4.0);
-    range = 1;
   } 
   else if (preset==3) {
+    setMandel();
     setRegion(-0.7505856822290244, 0.09319188280359733, 
                0.0073114653345977, 0.005481528937150232);
-    setMandel();
-    setColor(25,25,25,true);
+    setColor(25,25,25,0.01,true);
     setIterations(1000, 4.0);
-    range=0.01;
   } 
   else if (preset==4) {
+    setMandel();
     setRegion(-1.2584439628969177, 0.3824003228346746, 
                1.2240005653474384e-7, 9.180012777720847e-8);
-    setMandel();
-    setColor(0,4,0,false);
+    setColor(0,4,0,1,false);
     setIterations(3000, 4.0);
-    range = 1;
   } 
   else if (preset==5) {
+    setJulia(-0.751111111111111111,0.048888888888888889);
     setRegion(-0.902853313737312, 0.32191465632594346, 
                0.8258131992245716, 0.6193598994184287);
-    setJulia(-0.751111111111111111,0.048888888888888889);
     setIterations(2000,4.0);
     palette = 3;
     document.getElementById("nice").checked = true;
   } 
   else if (preset==6) {
+    setJulia(-0.777306122448979592,0.118040816326530612);
     setRegion(-1.5530336967141098, 1.0940454648625746, 
                3.081684406066686, 2.196795086888102);
-    setJulia(-0.777306122448979592,0.118040816326530612);
     setIterations(1000,4.0);
     palette = 2;
     document.getElementById("bw").checked = true;
@@ -189,7 +185,7 @@ function iter(a,b,x,y,ba,mi) {
 }
 
 
-function calcrowsmt () {
+function drawrows_mt () {
   gi = 0;
   for (var i = 0; i < maxthreads; i++) {
     var worker = workers[i];
@@ -274,7 +270,7 @@ function msghandler(worker, data) {
   }
 }
 
-function calcrows () {
+function drawrows () {
 
   var n = 0;
   var offset = 0; 
@@ -319,9 +315,9 @@ function calcrows () {
   if (gi <  surfaceheight-1) {
     gi++;
     if (gi % 24 != 0)
-      calcrows();
+      drawrows();
     else
-      setTimeout("calcrows()",0);
+      setTimeout("drawrows()",0);
   }
   else {
     var elapsed = new Date().getTime() - start;
@@ -335,7 +331,7 @@ function draw() {
   gi = 0;
   lp1 = extx / surfacewidth;
   lp2 = exty / surfaceheight; 
-  if (mthread.checked) calcrowsmt(); else calcrows(); 
+  if (mthread.checked) drawrows_mt(); else drawrows(); 
 }
 
 
@@ -396,19 +392,19 @@ function onmouseup ( e ) {
       julia = !julia;
 
       if (julia) {
-        prevstartx = startx;
-        prevstarty = starty;
-        prevextx = extx;
-        prevexty = exty;
-        prevre = re;
-        previm = im;
+        save_startx = startx;
+        save_starty = starty;
+        save_extx = extx;
+        save_exty = exty;
+        save_re = re;
+        save_im = im;
         setJulia(startx + (currx * lp1), starty - (curry * lp2));
         setRegion(-2, 1.5, 4, 3);
       }
       else {
-        setRegion(prevstartx,prevstarty,prevextx,prevexty);
-        re = prevre;
-        im = previm;
+        setRegion(save_startx,save_starty,save_extx,save_exty);
+        re = save_re;
+        im = save_im;
       }
     }
     draw();
@@ -459,8 +455,8 @@ function wheel(event){
   }
   if (delta)
     wheelhandle(delta);
-  if (event.preventDefault)
-    event.preventDefault();
+  if (event.save_entDefault)
+    event.save_entDefault();
   event.returnValue = false;
 }
 
@@ -469,20 +465,18 @@ function wheelhandle(delta) {
   if (delta < 0) {
     var visszx = oszt(surfacewidth, (surfacewidth - 8));
     var visszy = oszt(surfaceheight, (surfaceheight - (8 * surfaceheight / surfacewidth)));
-    extx = extx + (8 * lp1 * visszx);
-    exty = exty + ((8 * surfaceheight / surfacewidth) * lp2 *  visszy);
-    startx = startx - (4 * lp1 * visszx);
-    starty = starty + ((4 * surfaceheight / surfacewidth) * lp2 * visszy);  
   } 
   else {
-    extx = extx - (8 * lp1);
-    exty = exty - ((8 * surfaceheight / surfacewidth) * lp2);
-    startx = startx + (4 * lp1);
-    starty = starty - ((4 * surfaceheight / surfacewidth) *lp2);
+    var visszx = -1;
+    var visszy = -1;
   }
+  extx = extx + (8 * lp1 * visszx);
+  exty = exty + ((8 * surfaceheight / surfacewidth) * lp2 *  visszy);
+  startx = startx - (4 * lp1 * visszx);
+  starty = starty + ((4 * surfaceheight / surfacewidth) * lp2 * visszy);  
   if (mthread.checked) {
     clearTimeout(timeout);
-    timeout=setTimeout("draw()",250); 
+    timeout = setTimeout("draw()",250); 
   }
   else draw();  
 }
@@ -490,7 +484,7 @@ function wheelhandle(delta) {
 //touch
 
 function ontouchstart ( e ) {
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.targetTouches[0];
   mousedown = true;
 
@@ -501,7 +495,7 @@ function ontouchstart ( e ) {
 }
 
 function ontouchmove ( e ) {
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.targetTouches[0];
 
   var mousepos = getmousepos(canvas, touch);
@@ -520,7 +514,7 @@ function ontouchmove ( e ) {
 }
 
 function ontouchend ( e ) {      
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.changedTouches[0];
   if (mousedown) {   
     var mousepos = getmousepos(canvas, touch);
@@ -529,42 +523,33 @@ function ontouchend ( e ) {
 
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);  
 
+    // if it is a drawn box
     if ((Math.abs(currx - mousebx) > 3) && (Math.abs(curry - mouseby) > 3)) {
       extx = (startx + (currx * lp1)) - (startx + (mousebx * lp1));
       exty = (starty - (mouseby * lp2)) - (starty - (curry * lp2)) ;
       startx = startx + (mousebx * lp1);
       starty = starty - (mouseby * lp2);
-      draw();
     }
-
-    else {
+    else { // else it is a click: julia switch
       julia = !julia;
-
       if (julia) {
-        prevstartx = startx;
-        prevstarty = starty;
-        prevextx = extx;
-        prevexty = exty;
-        prevre = re;
-        previm = im;
+        save_startx = startx;
+        save_starty = starty;
+        save_extx = extx;
+        save_exty = exty;
+        save_re = re;
+        save_im = im;
         re = startx + (currx * lp1);
         im = starty - (curry * lp2);
-        startx = -2;
-        starty = 1.5;
-        extx = 4;
-        exty = 3;
+        setRegion(-2,1.5,4,4);
       }
       else {
-        startx = prevstartx;
-        starty = prevstarty;
-        extx = prevextx;
-        exty = prevexty;
-        re = prevre;
-        im = previm;
+        setRegion(save_startx,save_starty,save_extx,save_exty);
+        re = save_re;
+        im = save_im;
       }
-
-      draw();
     }
+    draw();
   }
   mousedown = false;
 }
@@ -606,8 +591,6 @@ function initialize ( canvasElement, w, h ) {
   canvas.width = w;
   canvas.height = h;
 
-  resetvalues(0);
-
   canvas.onmousedown = onmousedown;
   canvas.onmousemove = onmousemove;
   canvas.onmouseup = onmouseup;
@@ -616,7 +599,6 @@ function initialize ( canvasElement, w, h ) {
   canvas.addEventListener('touchmove', ontouchmove);
   canvas.addEventListener('touchend', ontouchend);
 }
-
 
 function oszt(x, y) {
   if (y == 0) return 0;
@@ -642,12 +624,16 @@ function load() {
   w = window.innerWidth;
   h = window.innerHeight;
   initialize("canvas", w, h);
+  resetvalues(0);
   draw();
 }
 
 // On resize of browser window, resize the canvas and redraw
 window.onresize = function() {
-     load();
+  w = window.innerWidth;
+  h = window.innerHeight;
+  initialize("canvas", w, h);
+  draw();
 }
 
 function paramschange() {
