@@ -75,6 +75,8 @@ function statsreportpos (xre,yim) {
 }
 
 function presetMandel () {
+    re = 0.0;
+    im = 0.0;
     julia = false; 
 }
 
@@ -84,8 +86,6 @@ function resetvalues (preset) {
     extx = 3.2;
     starty = 1.2;
     exty = 2.4;
-    re = 0.0;
-    im = 0.0;
     presetMandel();
     A_SLIDERS[0].f_setValue(6);
     A_SLIDERS[1].f_setValue(12);
@@ -107,8 +107,6 @@ function resetvalues (preset) {
     extx = -0.990116320000000000 - startx;
     starty = 0.309678196004106188;
     exty = starty-0.309641392638807744;
-    re = 0.0;
-    im = 0.0;
     presetMandel();
     A_SLIDERS[0].f_setValue(73);
     A_SLIDERS[1].f_setValue(86);
@@ -131,8 +129,6 @@ function resetvalues (preset) {
     extx = -0.747309046788541043 - startx;
     starty = 0.087867294132616292;
     exty = starty - 0.087840020000000000;
-    re = 0.0;
-    im = 0.0;
     presetMandel();
     A_SLIDERS[0].f_setValue(5);
     A_SLIDERS[1].f_setValue(5);
@@ -154,8 +150,6 @@ function resetvalues (preset) {
     extx = -0.743274216894426721 - startx;
     starty = 0.093191882803597334;
     exty = starty - 0.087710353866447093;
-    re = 0.0;
-    im = 0.0;
     presetMandel();
     A_SLIDERS[0].f_setValue(25);
     A_SLIDERS[1].f_setValue(25);
@@ -177,8 +171,6 @@ function resetvalues (preset) {
     extx = -1.258443840496861240 - startx;
     starty = 0.382400322834674643;
     exty = starty - 0.382400231034546839;
-    re = 0.0;
-    im = 0.0;
     presetMandel();
     A_SLIDERS[0].f_setValue(0);
     A_SLIDERS[1].f_setValue(4);
