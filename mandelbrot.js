@@ -22,12 +22,12 @@ var exty = 2.4;
 
 var re = 0.0;
 var im = 0.0;
-var prevstartx = startx; 
-var prevstarty = starty; 
-var prevextx = extx; 
-var prevexty = exty; 
-var prevre = re; 
-var previm = im; 
+var save_startx = startx; 
+var save_starty = starty; 
+var save_extx = extx; 
+var save_exty = exty; 
+var save_re = re; 
+var save_im = im; 
 var julia = false;   
 
 var lp1;
@@ -52,172 +52,112 @@ var timeout = 0;
 var gi = 0;
 var start = 0;
 
-function preset() { // escapevalue, maxiter, range, palette) {
-//    maxiter = maxiter;
-//    document.getElementById("iteration").value = maxiter;
-//    range = range;
-//    if (range == 1) {
-//      document.getElementById("p100").checked = false;
-//    }
-//    else {
-//      document.getElementById("p100").checked = true;
-//    }
-//    palette = 0;
-//    if (palette == 0) {
-//      document.getElementById("proc").checked = true;
-//    }
+function statsreport (msg) {
+//	tdiv=document.getElementById("rendtime");
+//	tdiv.innerHTML="Rend.Time: "+msg;
+//	xdiv=document.getElementById("divx");
+//	xdiv.innerHTML="x1: " + startx.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  x2: " + (startx+extx).toFixed(16);
+//	ydiv=document.getElementById("divy");
+//	ydiv.innerHTML="y1: " + starty.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  y2: " + (starty-exty).toFixed(16);
 }
 
-function pre (startx, extx, starty, exty, re, im, julia, red, green, blue, escapevalue ) {
-    startx = startx;
-    extx = extx;
-    starty = starty;
-    exty = exty;
-    re = im;
-    im = im;
-    julia = julia;
-    A_SLIDERS[0].f_setValue(red);
-    A_SLIDERS[1].f_setValue(green);
-    A_SLIDERS[2].f_setValue(blue);
+function statsreportpos (xre,yim) {
+//	xdiv=document.getElementById("divx");
+//	xdiv.innerHTML="x1: " + startx.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  x2: " + (startx+extx).toFixed(16) +
+//	 "&nbsp;&nbsp;&nbsp;&nbsp;  x: " + xre.toFixed(16);
+//	ydiv=document.getElementById("divy");
+//	ydiv.innerHTML="y1: " + starty.toFixed(16) + "&nbsp;&nbsp;&nbsp;&nbsp;  y2: " + (starty-exty).toFixed(16) +
+//	"&nbsp;&nbsp;&nbsp;&nbsp;  y: " + yim.toFixed(16);
+}
+
+function setMandel () {
+    re = 0.0;
+    im = 0.0;
+    julia = false; 
+}
+
+function setJulia (real, imaginary) {
+    re = real;
+    im = imaginary;
+    julia = true; 
+}
+
+function setColor (r, g, b, rng, p100) {
+    A_SLIDERS[0].f_setValue(r);
+    A_SLIDERS[1].f_setValue(g);
+    A_SLIDERS[2].f_setValue(b);
     gred = parseInt(document.getElementById("sliderred").value);
     ggreen = parseInt(document.getElementById("slidergreen").value);
     gblue = parseInt(document.getElementById("sliderblue").value);
-    escapevalue = escapevalue;
-    document.getElementById("escape").value = escapevalue;
-}
- 
-function resetvalues (preset) {
-  if (preset==0) {
-    maxiter = 150;
-    document.getElementById("iteration").value = maxiter;
-    range = 1;
-    document.getElementById("p100").checked = false;
     palette = 0;
     document.getElementById("proc").checked = true;
-    pre(-2.4, 3.2, 1.2, 2.4, 0.0, 0.0, false, 6, 12, 18, 4.0);// 150, 1, 0); 
+    document.getElementById("p100").checked = p100;
+    range = rng;
+}
+
+function setRegion (sx, sy, ex, ey) {
+    startx = sx;
+    extx = ex;
+    starty = sy;
+    exty = ey;
+}
+
+function setIterations (iters, esc) {
+    escapevalue = esc;
+    maxiter = iters;
+    document.getElementById("iteration").value = maxiter;
+    document.getElementById("escape").value = escapevalue;
+}
+
+function resetvalues (preset) {
+  if (preset==0) {
+    setMandel();
+    setRegion(-2.4,1.2,3.2,2.4);
+    setColor(6,12,18,1,false);
+    setIterations(150, 4.0);
   } 
   else if (preset==1) {
-    startx = -0.990165396112942994;
-    extx = -0.990116320000000000 - startx;
-    starty = 0.309678196004106188;
-    exty = starty-0.309641392638807744;
-    re = 0.0;
-    im = 0.0;
-    julia = false; 
-    A_SLIDERS[0].f_setValue(73);
-    A_SLIDERS[1].f_setValue(86);
-    A_SLIDERS[2].f_setValue(100);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=0.01;
-    document.getElementById("p100").checked =true;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setRegion(-0.9901653, 0.30967819, 0.000049076112, 0.00003680);
+    setMandel();
+    setColor(73,86,100,0.01,true);
+    setIterations(1000, 4.0);
   } 
-
   else if (preset==2) {
-    startx = -0.747345398829878366;
-    extx = -0.747309046788541043 - startx;
-    starty = 0.087867294132616292;
-    exty = starty - 0.087840020000000000;
-    re = 0.0;
-    im = 0.0;
-    julia = false; 
-    A_SLIDERS[0].f_setValue(5);
-    A_SLIDERS[1].f_setValue(5);
-    A_SLIDERS[2].f_setValue(5);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 500;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=1;
-    document.getElementById("p100").checked =false;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setMandel();
+    setRegion(-0.7473453988298784, 0.08786729413261629, 
+               0.00003635204133733971, 0.00002727413261628675);
+    setColor(5,5,5,1,false);
+    setIterations(500, 4.0);
   } 
   else if (preset==3) {
-    startx = -0.750585682229024399;
-    extx = -0.743274216894426721 - startx;
-    starty = 0.093191882803597334;
-    exty = starty - 0.087710353866447093;
-    re = 0.0;
-    im = 0.0;
-    julia = false; 
-    A_SLIDERS[0].f_setValue(25);
-    A_SLIDERS[1].f_setValue(25);
-    A_SLIDERS[2].f_setValue(25);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=0.01;
-    document.getElementById("p100").checked =true;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setMandel();
+    setRegion(-0.7505856822290244, 0.09319188280359733, 
+               0.0073114653345977, 0.005481528937150232);
+    setColor(25,25,25,0.01,true);
+    setIterations(1000, 4.0);
   } 
   else if (preset==4) {
-    startx = -1.258443962896917640;
-    extx = -1.258443840496861240 - startx;
-    starty = 0.382400322834674643;
-    exty = starty - 0.382400231034546839;
-    re = 0.0;
-    im = 0.0;
-    julia = false; 
-    A_SLIDERS[0].f_setValue(0);
-    A_SLIDERS[1].f_setValue(4);
-    A_SLIDERS[2].f_setValue(0);
-    gred=parseInt(document.getElementById("sliderred").value);
-    ggreen=parseInt(document.getElementById("slidergreen").value);
-    gblue=parseInt(document.getElementById("sliderblue").value);
-    escapevalue = 4.0;
-    maxiter = 3000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    range=1;
-    document.getElementById("p100").checked =false;
-    palette=0;
-    document.getElementById("proc").checked =true;
+    setMandel();
+    setRegion(-1.2584439628969177, 0.3824003228346746, 
+               1.2240005653474384e-7, 9.180012777720847e-8);
+    setColor(0,4,0,1,false);
+    setIterations(3000, 4.0);
   } 
   else if (preset==5) {
-    startx = -0.902853313737311980;
-    extx = -0.077040114512740367 - startx;
-    starty = 0.321914656325943444;
-    exty = starty + 0.297445243092485266;
-    re = -0.751111111111111111;
-    im = 0.048888888888888889;
-    julia = true; 
-    escapevalue = 4.0;
-    maxiter = 2000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    palette=3;
-    document.getElementById("nice").checked =true;
+    setJulia(-0.751111111111111111,0.048888888888888889);
+    setRegion(-0.902853313737312, 0.32191465632594346, 
+               0.8258131992245716, 0.6193598994184287);
+    setIterations(2000,4.0);
+    palette = 3;
+    document.getElementById("nice").checked = true;
   } 
   else if (preset==6) {
-    startx = -1.553033696714109880;
-    extx = 1.528650709352576100 - startx;
-    starty = 1.094045464862574510;
-    exty = starty + 1.102749622025527560;
-    re = -0.777306122448979592;
-    im = 0.118040816326530612;
-    julia = true; 
-    escapevalue = 4.0;
-    maxiter = 1000;
-    document.getElementById("iteration").value=maxiter;
-    document.getElementById("escape").value=escapevalue;
-    palette=2;
-    document.getElementById("bw").checked =true;
+    setJulia(-0.777306122448979592,0.118040816326530612);
+    setRegion(-1.5530336967141098, 1.0940454648625746, 
+               3.081684406066686, 2.196795086888102);
+    setIterations(1000,4.0);
+    palette = 2;
+    document.getElementById("bw").checked = true;
   } 
 }
 
@@ -240,12 +180,12 @@ function iter(a,b,x,y,ba,mi) {
 }
 
 
-function calcrowsmt () {
+function drawrows_mt () {
   gi = 0;
   for (var i = 0; i < maxthreads; i++) {
     var worker = workers[i];
     if (worker.idle) {
-      var b = (starty - (gi * lp2));
+      var b = starty - (gi * lp2);
       var a = startx;
       worker.idle = false;
       worker.postMessage({
@@ -294,7 +234,6 @@ function msghandler(worker, data) {
         pixels[offset++] = 255;
       }
     }
-
   }
   ct2d.putImageData(image, 0, data.gi);
   if (gi < surfaceheight) {
@@ -326,8 +265,7 @@ function msghandler(worker, data) {
   }
 }
 
-
-function calcrows () {
+function drawrows () {
 
   var n = 0;
   var offset = 0; 
@@ -335,11 +273,11 @@ function calcrows () {
   var image = ct2d.createImageData(surfacewidth, 1);
   var pixels = image.data;
 
-  var b = (starty - (gi * lp2));
+  var b = starty - (gi * lp2);
   var a = startx;
 
   for (var j = 0; j < surfacewidth; j++) {
-    a = a+lp1;
+    a = a + lp1;
     if (!julia)
       n = iter(a,b,re,im,escapevalue,maxiter);
     else
@@ -372,9 +310,9 @@ function calcrows () {
   if (gi <  surfaceheight-1) {
     gi++;
     if (gi % 24 != 0)
-      calcrows();
+      drawrows();
     else
-      setTimeout("calcrows()",0);
+      setTimeout("drawrows()",0);
   }
   else {
     var elapsed = new Date().getTime() - start;
@@ -383,12 +321,12 @@ function calcrows () {
 }
 
 
-function maincalc() {
+function draw() {
   start = new Date().getTime();
   gi = 0;
   lp1 = extx / surfacewidth;
   lp2 = exty / surfaceheight; 
-  if (!mthread.checked) calcrows(); else calcrowsmt(); 
+  if (mthread.checked) drawrows_mt(); else drawrows(); 
 }
 
 
@@ -435,44 +373,36 @@ function onmouseup ( e ) {
 
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);  
 
+    // if it is a box drawn
     if ((Math.abs(currx - mousebx) > 3) && (Math.abs(curry - mouseby) > 3)) {
 
       extx = (startx + (currx * lp1)) - (startx + (mousebx * lp1));
       exty = (starty - (mouseby * lp2)) - (starty - (curry * lp2)) ;
       startx = startx + (mousebx * lp1);
       starty = starty - (mouseby * lp2);
-
-      maincalc();
     }
-    //julia switch     
+    // else it is a click: julia switch     
     else {
 
       julia = !julia;
 
       if (julia) {
-        prevstartx = startx;
-        prevstarty = starty;
-        prevextx = extx;
-        prevexty = exty;
-        prevre = re;
-        previm = im;
-        re = startx + (currx * lp1);
-        im = starty - (curry * lp2);
-        startx = -2;
-        starty = 1.5;
-        extx = 4;
-        exty = 3;
+        save_startx = startx;
+        save_starty = starty;
+        save_extx = extx;
+        save_exty = exty;
+        save_re = re;
+        save_im = im;
+        setJulia(startx + (currx * lp1), starty - (curry * lp2));
+        setRegion(-2, 1.5, 4, 3);
       }
       else {
-        startx = prevstartx;
-        starty = prevstarty;
-        extx = prevextx;
-        exty = prevexty;
-        re = prevre;
-        im = previm;
+        setRegion(save_startx,save_starty,save_extx,save_exty);
+        re = save_re;
+        im = save_im;
       }
-      maincalc();
     }
+    draw();
   }
   else if (mousedown && e.button == 0 && e.ctrlKey) {
     var mousepos = getmousepos(canvas, e);
@@ -489,7 +419,7 @@ function onmouseup ( e ) {
       exty = (starty + (mouseby * lp2 * visszy)) - ((starty - exty) - ((surfaceheight - curry) * lp2 * visszy));
       startx = startx - (mousebx * lp1 * visszx);
       starty = starty + (mouseby * lp2 * visszy);
-      maincalc();
+      draw();
     }
   }
   else if (mousedown && e.button == 2) {
@@ -499,10 +429,10 @@ function onmouseup ( e ) {
     var curry = Math.round(mousepos.y); 
 
     if ((Math.abs(currx - mousebx) > 3) || (Math.abs(curry - mouseby) > 3)) {
-      startx = startx +((mousebx-currx)*lp1);
-      starty = starty -((mouseby-curry)*lp2);
+      startx = startx + ((mousebx-currx)*lp1);
+      starty = starty - ((mouseby-curry)*lp2);
 
-      maincalc();
+      draw();
     }
   }
   mousedown = false;
@@ -520,8 +450,8 @@ function wheel(event){
   }
   if (delta)
     wheelhandle(delta);
-  if (event.preventDefault)
-    event.preventDefault();
+  if (event.save_entDefault)
+    event.save_entDefault();
   event.returnValue = false;
 }
 
@@ -530,28 +460,26 @@ function wheelhandle(delta) {
   if (delta < 0) {
     var visszx = oszt(surfacewidth, (surfacewidth - 8));
     var visszy = oszt(surfaceheight, (surfaceheight - (8 * surfaceheight / surfacewidth)));
-    extx = extx + (8 * lp1 * visszx);
-    exty = exty + ((8 * surfaceheight / surfacewidth) * lp2 *  visszy);
-    startx = startx - (4 * lp1 * visszx);
-    starty = starty + ((4 * surfaceheight / surfacewidth) * lp2 * visszy);  
   } 
   else {
-    extx = extx - (8 * lp1);
-    exty = exty - ((8 * surfaceheight / surfacewidth) * lp2);
-    startx = startx + (4 * lp1);
-    starty = starty - ((4 * surfaceheight / surfacewidth) *lp2);
+    var visszx = -1;
+    var visszy = -1;
   }
+  extx = extx + (8 * lp1 * visszx);
+  exty = exty + ((8 * surfaceheight / surfacewidth) * lp2 *  visszy);
+  startx = startx - (4 * lp1 * visszx);
+  starty = starty + ((4 * surfaceheight / surfacewidth) * lp2 * visszy);  
   if (mthread.checked) {
     clearTimeout(timeout);
-    timeout=setTimeout("maincalc()",250); 
+    timeout = setTimeout("draw()",250); 
   }
-  else maincalc();  
+  else draw();  
 }
 
 //touch
 
 function ontouchstart ( e ) {
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.targetTouches[0];
   mousedown = true;
 
@@ -562,7 +490,7 @@ function ontouchstart ( e ) {
 }
 
 function ontouchmove ( e ) {
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.targetTouches[0];
 
   var mousepos = getmousepos(canvas, touch);
@@ -570,7 +498,6 @@ function ontouchmove ( e ) {
   var curry = Math.round(mousepos.y);
 
   if (mousedown) {   
-
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);
     ct2d.putImageData(backimg, 0, 0);
     ct2d.strokeStyle = "rgb(255,255,255)";
@@ -582,7 +509,7 @@ function ontouchmove ( e ) {
 }
 
 function ontouchend ( e ) {      
-  e.preventDefault();
+  e.save_entDefault();
   var touch = e.changedTouches[0];
   if (mousedown) {   
     var mousepos = getmousepos(canvas, touch);
@@ -591,42 +518,33 @@ function ontouchend ( e ) {
 
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);  
 
+    // if it is a drawn box
     if ((Math.abs(currx - mousebx) > 3) && (Math.abs(curry - mouseby) > 3)) {
       extx = (startx + (currx * lp1)) - (startx + (mousebx * lp1));
       exty = (starty - (mouseby * lp2)) - (starty - (curry * lp2)) ;
       startx = startx + (mousebx * lp1);
       starty = starty - (mouseby * lp2);
-      maincalc();
     }
-
-    else {
+    else { // else it is a click: julia switch
       julia = !julia;
-
       if (julia) {
-        prevstartx = startx;
-        prevstarty = starty;
-        prevextx = extx;
-        prevexty = exty;
-        prevre = re;
-        previm = im;
+        save_startx = startx;
+        save_starty = starty;
+        save_extx = extx;
+        save_exty = exty;
+        save_re = re;
+        save_im = im;
         re = startx + (currx * lp1);
         im = starty - (curry * lp2);
-        startx = -2;
-        starty = 1.5;
-        extx = 4;
-        exty = 3;
+        setRegion(-2,1.5,4,4);
       }
       else {
-        startx = prevstartx;
-        starty = prevstarty;
-        extx = prevextx;
-        exty = prevexty;
-        re = prevre;
-        im = previm;
+        setRegion(save_startx,save_starty,save_extx,save_exty);
+        re = save_re;
+        im = save_im;
       }
-
-      maincalc();
     }
+    draw();
   }
   mousedown = false;
 }
@@ -644,14 +562,14 @@ function radiovalue () {
 function initialize ( canvasElement, w, h ) {
   mthread = document.getElementById("mthread");
   if (!window.Worker) {
-    mthread.checked=false;
-    mthread.disabled=true;
+    mthread.checked = false;
+    mthread.disabled = true;
   }
   else {
-    mthread.checked=true;
+    mthread.checked = true;
     for (var i = 0; i < maxthreads; i++) {
       var worker = new Worker("worker.js");
-      worker.onmessage = function(event) { msghandler(event.target, event.data) }
+      worker.onmessage = function(e) { msghandler(e.target, e.data) }
       worker.idle = true;
       workers.push(worker);
     }
@@ -668,8 +586,6 @@ function initialize ( canvasElement, w, h ) {
   canvas.width = w;
   canvas.height = h;
 
-  resetvalues(0);
-
   canvas.onmousedown = onmousedown;
   canvas.onmousemove = onmousemove;
   canvas.onmouseup = onmouseup;
@@ -678,7 +594,6 @@ function initialize ( canvasElement, w, h ) {
   canvas.addEventListener('touchmove', ontouchmove);
   canvas.addEventListener('touchend', ontouchend);
 }
-
 
 function oszt(x, y) {
   if (y == 0) return 0;
@@ -704,14 +619,17 @@ function load() {
   w = window.innerWidth;
   h = window.innerHeight;
   initialize("canvas", w, h);
-  maincalc();
+  resetvalues(0);
+  draw();
 }
 
-// When you resize the browser window, we need
-// to resize the canvas and redraw
+// On resize of browser window, resize the canvas and redraw
 window.onresize = function() {
-     load();
-};
+  w = window.innerWidth;
+  h = window.innerHeight;
+  initialize("canvas", w, h);
+  draw();
+}
 
 function paramschange() {
   maxiter = parseInt(document.getElementById("iteration").value);
@@ -720,7 +638,7 @@ function paramschange() {
   ggreen = parseInt(document.getElementById("slidergreen").value);
   gblue = parseInt(document.getElementById("sliderblue").value);
   range = document.getElementById("p100").checked ? 0.01 : 1;
-  palette = radiovalue ();
-  maincalc();
+  palette = radiovalue();
+  draw();
 }
 
