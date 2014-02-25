@@ -98,7 +98,7 @@ function setColor (r, g, b, p100) {
     document.getElementById("p100").checked = p100;
 }
 
-function setRegion (sx, ex, sy, ey) {
+function setRegion (sx, sy, ex, ey) {
     startx = sx;
     extx = ex;
     starty = sy;
@@ -114,49 +114,55 @@ function setIterations (iters, esc) {
 
 function resetvalues (preset) {
   if (preset==0) {
-    setRegion(-2.4,3.2,1.2,2.4);
+    setRegion(-2.4,1.2,3.2,2.4);
     setMandel();
     setColor(6,12,18,false);
     setIterations(150, 4.0);
     range = 1;
   } 
   else if (preset==1) {
-    setRegion(-0.990165396112943, 0.00004907611294291403, 0.3096781960041062, 0.00003680336529843231);
+    setRegion(-0.990165396112943, 0.3096781960041062, 
+               0.00004907611294291403, 0.00003680336529843231);
     setMandel();
     setColor(73,86,100,true);
     setIterations(1000, 4.0);
     range = 0.01;
   } 
   else if (preset==2) {
-    setRegion(-0.7473453988298784, 0.00003635204133733971, 0.08786729413261629, 0.00002727413261628675);
+    setRegion(-0.7473453988298784, 0.08786729413261629, 
+               0.00003635204133733971, 0.00002727413261628675);
     setMandel();
     setColor(5,5,5,false);
     setIterations(500, 4.0);
     range = 1;
   } 
   else if (preset==3) {
-    setRegion(-0.7505856822290244, 0.0073114653345977, 0.09319188280359733, 0.005481528937150232);
+    setRegion(-0.7505856822290244, 0.09319188280359733, 
+               0.0073114653345977, 0.005481528937150232);
     setMandel();
     setColor(25,25,25,true);
     setIterations(1000, 4.0);
     range=0.01;
   } 
   else if (preset==4) {
-    setRegion(-1.2584439628969177, 1.2240005653474384e-7, 0.3824003228346746, 9.180012777720847e-8);
+    setRegion(-1.2584439628969177, 0.3824003228346746, 
+               1.2240005653474384e-7, 9.180012777720847e-8);
     setMandel();
     setColor(0,4,0,false);
     setIterations(3000, 4.0);
     range = 1;
   } 
   else if (preset==5) {
-    setRegion(-0.902853313737312, 0.8258131992245716, 0.32191465632594346, 0.6193598994184287);
+    setRegion(-0.902853313737312, 0.32191465632594346, 
+               0.8258131992245716, 0.6193598994184287);
     setJulia(-0.751111111111111111,0.048888888888888889);
     setIterations(2000,4.0);
     palette = 3;
     document.getElementById("nice").checked = true;
   } 
   else if (preset==6) {
-    setRegion(-1.5530336967141098, 3.081684406066686, 1.0940454648625746, 2.196795086888102);
+    setRegion(-1.5530336967141098, 1.0940454648625746, 
+               3.081684406066686, 2.196795086888102);
     setJulia(-0.777306122448979592,0.118040816326530612);
     setIterations(1000,4.0);
     palette = 2;
@@ -188,7 +194,7 @@ function calcrowsmt () {
   for (var i = 0; i < maxthreads; i++) {
     var worker = workers[i];
     if (worker.idle) {
-      var b = (starty - (gi * lp2));
+      var b = starty - (gi * lp2);
       var a = startx;
       worker.idle = false;
       worker.postMessage({
@@ -268,7 +274,6 @@ function msghandler(worker, data) {
   }
 }
 
-
 function calcrows () {
 
   var n = 0;
@@ -277,11 +282,11 @@ function calcrows () {
   var image = ct2d.createImageData(surfacewidth, 1);
   var pixels = image.data;
 
-  var b = (starty - (gi * lp2));
+  var b = starty - (gi * lp2);
   var a = startx;
 
   for (var j = 0; j < surfacewidth; j++) {
-    a = a+lp1;
+    a = a + lp1;
     if (!julia)
       n = iter(a,b,re,im,escapevalue,maxiter);
     else
@@ -325,12 +330,12 @@ function calcrows () {
 }
 
 
-function maincalc() {
+function draw() {
   start = new Date().getTime();
   gi = 0;
   lp1 = extx / surfacewidth;
   lp2 = exty / surfaceheight; 
-  if (!mthread.checked) calcrows(); else calcrowsmt(); 
+  if (mthread.checked) calcrowsmt(); else calcrows(); 
 }
 
 
@@ -377,16 +382,15 @@ function onmouseup ( e ) {
 
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);  
 
+    // if it is a box drawn
     if ((Math.abs(currx - mousebx) > 3) && (Math.abs(curry - mouseby) > 3)) {
 
       extx = (startx + (currx * lp1)) - (startx + (mousebx * lp1));
       exty = (starty - (mouseby * lp2)) - (starty - (curry * lp2)) ;
       startx = startx + (mousebx * lp1);
       starty = starty - (mouseby * lp2);
-
-      maincalc();
     }
-    //julia switch     
+    // else it is a click: julia switch     
     else {
 
       julia = !julia;
@@ -398,23 +402,16 @@ function onmouseup ( e ) {
         prevexty = exty;
         prevre = re;
         previm = im;
-        re = startx + (currx * lp1);
-        im = starty - (curry * lp2);
-        startx = -2;
-        starty = 1.5;
-        extx = 4;
-        exty = 3;
+        setJulia(startx + (currx * lp1), starty - (curry * lp2));
+        setRegion(-2, 1.5, 4, 3);
       }
       else {
-        startx = prevstartx;
-        starty = prevstarty;
-        extx = prevextx;
-        exty = prevexty;
+        setRegion(prevstartx,prevstarty,prevextx,prevexty);
         re = prevre;
         im = previm;
       }
-      maincalc();
     }
+    draw();
   }
   else if (mousedown && e.button == 0 && e.ctrlKey) {
     var mousepos = getmousepos(canvas, e);
@@ -431,7 +428,7 @@ function onmouseup ( e ) {
       exty = (starty + (mouseby * lp2 * visszy)) - ((starty - exty) - ((surfaceheight - curry) * lp2 * visszy));
       startx = startx - (mousebx * lp1 * visszx);
       starty = starty + (mouseby * lp2 * visszy);
-      maincalc();
+      draw();
     }
   }
   else if (mousedown && e.button == 2) {
@@ -441,10 +438,10 @@ function onmouseup ( e ) {
     var curry = Math.round(mousepos.y); 
 
     if ((Math.abs(currx - mousebx) > 3) || (Math.abs(curry - mouseby) > 3)) {
-      startx = startx +((mousebx-currx)*lp1);
-      starty = starty -((mouseby-curry)*lp2);
+      startx = startx + ((mousebx-currx)*lp1);
+      starty = starty - ((mouseby-curry)*lp2);
 
-      maincalc();
+      draw();
     }
   }
   mousedown = false;
@@ -485,9 +482,9 @@ function wheelhandle(delta) {
   }
   if (mthread.checked) {
     clearTimeout(timeout);
-    timeout=setTimeout("maincalc()",250); 
+    timeout=setTimeout("draw()",250); 
   }
-  else maincalc();  
+  else draw();  
 }
 
 //touch
@@ -512,7 +509,6 @@ function ontouchmove ( e ) {
   var curry = Math.round(mousepos.y);
 
   if (mousedown) {   
-
     curry = mouseby + (booltoint(curry > mouseby) * 2 - 1) * Math.round(surfaceheight * Math.abs(currx - mousebx) / surfacewidth);
     ct2d.putImageData(backimg, 0, 0);
     ct2d.strokeStyle = "rgb(255,255,255)";
@@ -538,7 +534,7 @@ function ontouchend ( e ) {
       exty = (starty - (mouseby * lp2)) - (starty - (curry * lp2)) ;
       startx = startx + (mousebx * lp1);
       starty = starty - (mouseby * lp2);
-      maincalc();
+      draw();
     }
 
     else {
@@ -567,7 +563,7 @@ function ontouchend ( e ) {
         im = previm;
       }
 
-      maincalc();
+      draw();
     }
   }
   mousedown = false;
@@ -586,14 +582,14 @@ function radiovalue () {
 function initialize ( canvasElement, w, h ) {
   mthread = document.getElementById("mthread");
   if (!window.Worker) {
-    mthread.checked=false;
-    mthread.disabled=true;
+    mthread.checked = false;
+    mthread.disabled = true;
   }
   else {
-    mthread.checked=true;
+    mthread.checked = true;
     for (var i = 0; i < maxthreads; i++) {
       var worker = new Worker("worker.js");
-      worker.onmessage = function(event) { msghandler(event.target, event.data) }
+      worker.onmessage = function(e) { msghandler(e.target, e.data) }
       worker.idle = true;
       workers.push(worker);
     }
@@ -646,14 +642,13 @@ function load() {
   w = window.innerWidth;
   h = window.innerHeight;
   initialize("canvas", w, h);
-  maincalc();
+  draw();
 }
 
-// When you resize the browser window, we need
-// to resize the canvas and redraw
+// On resize of browser window, resize the canvas and redraw
 window.onresize = function() {
      load();
-};
+}
 
 function paramschange() {
   maxiter = parseInt(document.getElementById("iteration").value);
@@ -662,7 +657,7 @@ function paramschange() {
   ggreen = parseInt(document.getElementById("slidergreen").value);
   gblue = parseInt(document.getElementById("sliderblue").value);
   range = document.getElementById("p100").checked ? 0.01 : 1;
-  palette = radiovalue ();
-  maincalc();
+  palette = radiovalue();
+  draw();
 }
 
